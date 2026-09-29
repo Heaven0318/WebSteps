@@ -4,7 +4,7 @@
 
 🌐 **Visit the learning app:** [https://heaven0318.github.io/WebSteps/](https://heaven0318.github.io/WebSteps/)
 
-WebSteps is a browser-based course with a guided curriculum, hands-on code playground, projects, quizzes, and progress tracking. It helps learners move from web fundamentals to building and publishing complete projects.
+WebSteps is a browser-based course with a guided curriculum, hands-on code playground, projects, quizzes, and progress tracking. It is designed to help learners move from web fundamentals to building and publishing complete projects.
 
 ## What is included
 
@@ -13,7 +13,7 @@ WebSteps is a browser-based course with a guided curriculum, hands-on code playg
 - An editable HTML/CSS/JavaScript playground with a sandboxed preview and console output.
 - Quizzes, a searchable reference library, roadmap navigation, and lesson-by-lesson progress.
 - Guest progress saved in the browser, plus versioned progress backup export and import.
-- Optional accounts and cloud progress using Supabase. Account email flows need production Auth redirect settings and SMTP before general use.
+- Optional accounts and cloud progress using Supabase. Account email flows are not ready for general use until the Supabase Auth site/redirect URLs and a production SMTP provider are configured.
 
 ## Start learning
 
@@ -21,38 +21,38 @@ Open the [WebSteps learning app](https://heaven0318.github.io/WebSteps/), choose
 
 ## Run locally
 
-The app is static and has no install step. From the repository root, serve the dist directory over HTTP:
+The app is static and has no install step. From the repository root, serve the `dist` directory over HTTP:
 
 ```sh
 python -m http.server 4173 --directory dist
 ```
 
-Then open http://localhost:4173/. Hash routes such as /#/lesson/lesson-06 can be bookmarked and loaded directly. Opening dist/index.html as a file:// URL is not supported because JavaScript modules and IndexedDB require a browser origin.
+Then open <http://localhost:4173/>. Hash routes (for example `/#/lesson/lesson-06`) can be bookmarked and loaded directly. Opening `dist/index.html` as a `file://` URL is not supported because JavaScript modules and IndexedDB require a browser origin.
 
 ## How it is built
 
-- `dist/index.html`, `dist/styles.css`, and `dist/app.js` provide the app shell and interface.
+- `dist/index.html`, `dist/styles.css`, and `dist/app.js` provide the static app shell and interface.
 - `dist/curriculum.js` contains the versioned lessons, quizzes, and project definitions.
-- `dist/runner.js` runs learner code in an opaque-origin sandboxed iframe and bridges console output and project checks. A Worker preflight catches syntax errors and immediate runaway loops, but cannot prevent every browser-native or event-triggered hang.
+- `dist/runner.js` runs learner code in an opaque-origin sandboxed iframe and bridges console output and project checks. A Worker preflight catches syntax errors and immediate runaway loops; it cannot prevent every browser-native or event-triggered hang.
 - `dist/storage.js` stores guest progress locally with IndexedDB.
 - `dist/account-service.js` integrates optional Supabase authentication and cloud progress.
-- `dist/demos.js`, `dist/quiz-second.js`, `dist/project-solutions.js`, and `dist/enhancements.css` provide supporting learning interactions.
+- `dist/demos.js`, `dist/quiz-second.js`, `dist/project-solutions.js`, and `dist/enhancements.css` provide demonstrations and supporting learning interactions.
 - `supabase/schema.sql` defines the learning-state table and owner-only row-level security policies.
-- `supabase/functions/delete-websteps-account/` contains the authenticated account-deletion function.
-- `.github/workflows/pages.yml` publishes the `dist/` folder to GitHub Pages when `main` is updated.
+- `supabase/functions/delete-websteps-account/` contains the authenticated account deletion function.
+- `.github/workflows/pages.yml` publishes the `dist/` folder to GitHub Pages whenever `main` is updated.
 
 ## Accounts and Supabase
 
-Guest learning and local progress do not require an account. The optional cloud account feature uses the Supabase project configured in `dist/account-config.js`; its browser-side project URL and publishable key are designed to be public. Never put a Supabase secret or service-role key in this repository or browser code.
+Guest learning and local progress do not require an account. The optional cloud account feature uses the Supabase project configured in `dist/account-config.js`; the browser-side project URL and publishable key are designed to be public. Never place a Supabase secret or service-role key in this repository or in browser code.
 
-Before enabling public signups, set the Supabase Auth Site URL to https://heaven0318.github.io/WebSteps/, allow that origin and http://localhost:4173/** as redirect URLs, and configure a production SMTP provider. Until the email settings are completed and verified, registration, confirmation, and password-reset emails may not work reliably. The deployed site is usable for guest learning in the meantime.
+Before enabling public signups, set the Supabase Auth Site URL to `https://heaven0318.github.io/WebSteps/`, allow that origin and `http://localhost:4173/**` as redirect URLs, and configure a production SMTP provider. Until those email settings are completed and verified, registration, confirmation, and password-reset email flows may not work reliably. The deployed site is usable for guest learning in the meantime.
 
-Keep row-level security enabled so users can access only their own cloud learning state. Test signup, email verification, password reset, login/logout, account deletion, guest-to-account transfer, conflict handling, and cross-device sync with test accounts before relying on cloud progress.
+The cloud table must have row-level security enabled so users can access only their own learning state. Test signup, email verification, password reset, login/logout, account deletion, guest-to-account transfer, conflict handling, and cross-device sync with test accounts before inviting learners to rely on cloud progress.
 
 ## Testing before release
 
-Check the homepage, a direct lesson URL, a complete guest lesson, quizzes, project checks, backup export/import, mobile navigation, keyboard focus, responsive layouts, and the browser console on the deployed site. Automated project checks cover only some requirements; learners should also review objectives themselves. Automated checks do not prove complete accessibility, visual, semantic, or responsive quality.
+Check the homepage, a direct lesson URL, a full guest lesson, quizzes, project checks, backup export/import, mobile navigation, keyboard focus, responsive layouts, and the browser console on the deployed site. Automated project checks cover only some requirements; learners should also review the stated objectives themselves. Automated checks do not prove complete accessibility, visual, semantic, or responsive quality.
 
 ## Privacy and data
 
-Guest progress is stored in that browser and does not sync automatically. Clearing site data may remove it, so export a backup in Settings. Account-based learning-state sync uses the Supabase backend and its row-level security policies.
+Guest progress is stored in that browser and does not sync automatically. Clearing site data may remove it, so use Settings to export a backup. If you create an account after cloud email has been configured, learning-state sync uses the Supabase backend and its row-level security policies.
