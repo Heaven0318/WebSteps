@@ -9,3 +9,4 @@
 @media(max-width:900px){.panel-size{display:none}}
 @media(max-width:979px){.lesson-layout{grid-template-columns:1fr}.panel-size{display:none}}
 .demo{margin-top:18px}.demo-target{border:1px dashed var(--line);border-radius:8px;background:var(--panel2);min-height:70px;margin:12px 0}.demo-target span{display:inline-block;background:var(--css);color:#101217;border-radius:5px;padding:6px;margin:4px}.demo-shift{transform:translateX(20px)}
+.notice.success{color:var(--good);border-color:#32674d}.notice.error{color:var(--bad);border-color:#86434b}.notice[role=status]{margin-top:14px}
