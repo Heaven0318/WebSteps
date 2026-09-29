@@ -25,10 +25,11 @@ export async function restoreSession(){
   try{const user=await request('/auth/v1/user',{token:session.access_token});session.user=user;store(session);return user}catch{clearSession();return null}
 }
 export async function refreshSession(){if(!session?.refresh_token)throw Error('Your session expired. Sign in again.');const result=await request('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:{refresh_token:session.refresh_token}});return store({...result,expires_at:Date.now()+result.expires_in*1000})}
-export async function signUp(email,password){return request('/auth/v1/signup',{method:'POST',body:{email,password,options:{email_redirect_to:location.origin+location.pathname+'#/account'}}})}
+function authRedirectURL(){return location.origin+location.pathname}
+export async function signUp(email,password){return request('/auth/v1/signup?redirect_to='+encodeURIComponent(authRedirectURL()),{method:'POST',body:{email,password}})}
 export async function signIn(email,password){const data=await request('/auth/v1/token?grant_type=password',{method:'POST',body:{email,password}});store({...data,expires_at:Date.now()+data.expires_in*1000});return data}
 export async function resendVerification(email){return request('/auth/v1/resend',{method:'POST',body:{type:'signup',email}})}
-export async function sendReset(email){return request('/auth/v1/recover',{method:'POST',body:{email,redirect_to:location.origin+location.pathname+'#/account'}})}
+export async function sendReset(email){return request('/auth/v1/recover?redirect_to='+encodeURIComponent(authRedirectURL()),{method:'POST',body:{email}})}
 export async function updatePassword(password){if(!session)throw Error('Sign in to change your password.');return request('/auth/v1/user',{method:'PUT',token:session.access_token,body:{password}})}
 export async function signOut(){if(session){try{await request('/auth/v1/logout',{method:'POST',token:session.access_token})}finally{clearSession()}}}
 export async function deleteAccount(){if(!session)throw Error('Sign in first.');await request('/functions/v1/delete-websteps-account',{method:'POST',token:session.access_token,body:{confirm:true}});clearSession()}

@@ -13,7 +13,7 @@ WebSteps is a browser-based course with a guided curriculum, hands-on code playg
 - An editable HTML/CSS/JavaScript playground with a sandboxed preview and console output.
 - Quizzes, a searchable reference library, roadmap navigation, and lesson-by-lesson progress.
 - Guest progress saved in the browser, plus versioned progress backup export and import.
-- Optional accounts and cloud progress using Supabase. Account email flows are not ready for general use until the Supabase Auth site/redirect URLs and a production SMTP provider are configured.
+- Optional accounts and cloud progress using Supabase. Production Auth redirects are configured; public account email flows need a production SMTP provider.
 
 ## Start learning
 
@@ -45,7 +45,7 @@ Then open <http://localhost:4173/>. Hash routes (for example `/#/lesson/lesson-0
 
 Guest learning and local progress do not require an account. The optional cloud account feature uses the Supabase project configured in `dist/account-config.js`; the browser-side project URL and publishable key are designed to be public. Never place a Supabase secret or service-role key in this repository or in browser code.
 
-Before enabling public signups, set the Supabase Auth Site URL to `https://heaven0318.github.io/WebSteps/`, allow that origin and `http://localhost:4173/**` as redirect URLs, and configure a production SMTP provider. Until those email settings are completed and verified, registration, confirmation, and password-reset email flows may not work reliably. The deployed site is usable for guest learning in the meantime.
+The Supabase Auth Site URL and exact production redirect are configured as `https://heaven0318.github.io/WebSteps/`. To reliably support signups, email confirmation, and password resets for the public, configure a production SMTP provider in Supabase Auth. The default Supabase mail service is limited and is not intended for production. Local development redirects are not allow-listed; add a specific localhost URL only if you need local auth testing.
 
 The cloud table must have row-level security enabled so users can access only their own learning state. Test signup, email verification, password reset, login/logout, account deletion, guest-to-account transfer, conflict handling, and cross-device sync with test accounts before inviting learners to rely on cloud progress.
 
